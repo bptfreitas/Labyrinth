@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import drivers.class_base_driver_map as bm
+import drivers.class_base_map_driver as bm
 
 import sys
 import unittest
@@ -36,7 +36,10 @@ class Map:
                 self.__draw_history = []
 
                 if current_line % 2 == 0:
-                    # even line, horizontal bars
+                    # even line, horizontal wall
+
+                    wall_chars = 0
+
                     line_index = current_line / 2
 
                     column_index = 0
@@ -62,6 +65,9 @@ class Map:
                             self.__MapDriver.WriteHorizontalWall( ( line_index, column_index ) ); 
                             self.__draw_history.append( ( "H", line_index, column_index) )
 
+                            # this variable holds the number of wall 
+                            wall_chars += 1
+
                             column_index += 1
                         else:
 
@@ -72,8 +78,18 @@ class Map:
 
                         last_char = character
 
+                    if current_line == 0:
+                        # first line defines the maze width
+                        self.__maze_width = wall_chars
+                    else:
+                        # all other lines must match the number above
+                        if self.__maze_width != wall_chars:
+                            msg = "Line {0} has width {1}, expected {2}!".\
+                                format( current_line, wall_chars, self.__maze_width )
+                            raise ValueError(msg)
+
                 else:
-                    # odd line, vertical bars
+                    # odd line, vertical walls
                     while len( self.__connectors ) > 0:
                         coordinates = self.__connectors.pop(0)
 
@@ -84,8 +100,6 @@ class Map:
                         self.__draw_history.append( ( "V", x, y ) )                        
 
                 line_index += 1
-                print(line)
-
 
 class TestMap(unittest.TestCase):
 
