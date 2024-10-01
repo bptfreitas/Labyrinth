@@ -127,7 +127,21 @@ class TestMap(unittest.TestCase):
 
         map = mc.Map(mapDriver)
 
-        self.assertRaises( ValueError, map.ReadMap, map_file )        
+        self.assertRaises( ValueError, map.ReadMap, map_file )
+
+    def test_expected_number_of_vertical_walls_01(self):
+
+        map_file = "/tmp/test_expected_number_of_vertical_walls.txt"
+        
+        with open(map_file, "w") as map01:
+
+            map01.write( "-*-*\n|" )
+
+        mapDriver = bm.BaseMapDriver()
+
+        map = mc.Map(mapDriver)
+
+        self.assertRaises( ValueError, map.ReadMap, map_file )          
 
     def test_vertical_wall_01(self):
 

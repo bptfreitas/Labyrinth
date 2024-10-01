@@ -103,14 +103,25 @@ class Map:
                         msg = "Line {0} empty, expected column line"
                         raise ValueError( msg.format( current_line ) )
 
+                    expected_walls = len( self.__connectors )
+                    returned_walls = 0
+
                     for element in range( len(line) ):
                         character = line[element]
-                        if character == '|' or character == ' ':
-                            # vertical line character or empty space, proceed
+                        if character == '|':
+                            # vertical line character, add to expected walls
+                            returned_walls += 1
+                            continue
+                        elif character == ' ':
                             continue
                         else:
                             msg = "Line {0}: expected '|' or empty space, got '{1}'"
                             raise ValueError (msg.format( current_line, character ) )
+
+                    if returned_walls != expected_walls :
+                        msg = "Line {0}: expected {1} '|''s, got {2}"
+                        raise ValueError (msg.format( current_line, expected_walls, returned_walls ) )                        
+
 
                     # odd line, vertical walls
                     while len( self.__connectors ) > 0:
