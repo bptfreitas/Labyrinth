@@ -5,6 +5,8 @@ import drivers.class_base_map_driver as bm
 import sys
 import unittest
 
+debug = True
+
 class Map:
 
     def __init__(self, BaseMapDriver):
@@ -26,17 +28,22 @@ class Map:
             
             current_line = 0
 
+            self.__draw_history = []
+
             while True: 
                 line = map.readline().strip()
+
+                if debug:
+                    print("\nLine ", current_line,": ", line  )
 
                 if line == '':
                     break
 
-                self.__connectors = []
-                self.__draw_history = []
-
                 if current_line % 2 == 0:
                     # even line, horizontal wall
+
+                    # reset connector list for odd lines
+                    self.__connectors = []
 
                     wall_chars = 0
 
@@ -65,10 +72,14 @@ class Map:
                             self.__MapDriver.WriteHorizontalWall( ( line_index, column_index ) ); 
                             self.__draw_history.append( ( "H", line_index, column_index) )
 
-                            # this variable holds the number of wall 
+                            # this variable holds the current width of the wall 
                             wall_chars += 1
 
                             column_index += 1
+                        elif character == ' ':
+                            # open wall, do nothing
+                            wall_chars += 1
+
                         else:
 
                             sys.stderr.write("\n[WARN] Invalid character (" +\
@@ -82,13 +93,26 @@ class Map:
                         # first line defines the maze width
                         self.__maze_width = wall_chars
                     else:
-                        # all other lines must match the number above
+                        # all other lines must match the number calculated above
                         if self.__maze_width != wall_chars:
                             msg = "Line {0} has width {1}, expected {2}!".\
                                 format( current_line, wall_chars, self.__maze_width )
                             raise ValueError(msg)
 
-                else:
+                else:                    
+                    if len(line) == 0:
+                        msg = "Line {0} empty, expected column line"
+                        raise ValueError( msg.format( current_line ) )
+
+                    for element in range( len(line) ):
+                        character = line[element]
+                        if character == '|' or character == ' ':
+                            # vertical line character or empty space, proceed
+                            continue
+                        else:
+                            msg = "Line {0}: expected '|' or empty space, got '{1}'"
+                            raise ValueError (msg.format( current_line, character ) )
+
                     # odd line, vertical walls
                     while len( self.__connectors ) > 0:
                         coordinates = self.__connectors.pop(0)
@@ -96,10 +120,10 @@ class Map:
                         x = coordinates[ 0 ]
                         y = coordinates[ 1 ]
 
-                        self.__MapDriver.WriteVerticalWall( ( x, y ) );
+                        # self.__MapDriver.WriteVerticalWall( ( x, y ) );
                         self.__draw_history.append( ( "V", x, y ) )                        
 
-                line_index += 1
+                current_line += 1
 
 class TestMap(unittest.TestCase):
 
@@ -189,7 +213,6 @@ class TestMap(unittest.TestCase):
         self.assertEqual( draw_history[1], ( "C", 0, 1 ) )
         self.assertEqual( draw_history[2], ( "H", 0, 1 ) )
 
-
     def test_sequential_connectors_01(self):
 
         map_file = "/tmp/test_sequential_connectors_01.txt"
@@ -204,7 +227,42 @@ class TestMap(unittest.TestCase):
 
         self.assertRaises( ValueError, map.ReadMap, map_file )
 
-    
+    def test_empty_column_line_01(self):
+
+        self.skipTest("Must refactor what to do with empty lines")
+
+        map_file = "/tmp/test_empty_column_line_01.txt"
+        
+        with open(map_file, "w") as map01:
+
+            map01.write( "-\n " )
+
+        mapDriver = bm.BaseMapDriver()
+
+        map = Map(mapDriver)
+
+        self.assertRaises( ValueError, map.ReadMap, map_file )        
+
+    def test_vertical_wall_01(self):
+
+        map_file = "/tmp/test_vertical_wall_01.txt"
+        
+        with open(map_file, "w") as map01:
+
+            map01.write( "*\n|" )
+
+        mapDriver = bm.BaseMapDriver()
+
+        map = Map(mapDriver)
+
+        map.ReadMap( map_file )
+
+        draw_history = map.getDrawHistory()
+
+        self.assertEqual( len(draw_history), 2 )
+        
+        self.assertEqual( draw_history[0], ( "C", 0, 0 ) )
+        self.assertEqual( draw_history[1], ( "V", 0, 0 ) )
 
 if __name__ == '__main__' :
 
