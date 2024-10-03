@@ -1,0 +1,9 @@
+DEF WALL_$n Solid {
+  translation $x $y $z
+  rotation 0 0 1 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  name "solid($n)"
+  boundingObject USE WALL_SHAPE
+}

@@ -1,0 +1,8 @@
+DEF WALL_$n Solid {
+  translation $x $y $z
+  children [
+    USE WALL_SHAPE
+  ]
+  name "solid($n)"
+  boundingObject USE WALL_SHAPE
+}
