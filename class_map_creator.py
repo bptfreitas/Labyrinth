@@ -9,9 +9,9 @@ debug = True
 
 class Map:
 
-    def __init__(self, BaseMapDriver):
+    def __init__(self, MapDriver):
 
-        self.__MapDriver = bm.BaseMapDriver()
+        self.__MapDriver = MapDriver
 
         self.__connectors = []
 
@@ -68,7 +68,7 @@ class Map:
 
                         elif character == '-':
                             # horizontal wall
-                            self.__MapDriver.WriteHorizontalWall( ( line_index, column_index ) ); 
+                            self.__MapDriver.WriteHorizontalWall( line_index, column_index ); 
                             self.__draw_history.append( ( "H", line_index, column_index) )
 
                             # this variable holds the current width of the wall 
@@ -106,6 +106,8 @@ class Map:
                     expected_walls = len( self.__connectors )
                     returned_walls = 0
 
+                    # checking for valid characters
+
                     for element in range( len(line) ):
                         character = line[element]
                         if character == '|':
@@ -130,7 +132,10 @@ class Map:
                         x = coordinates[ 0 ]
                         y = coordinates[ 1 ]
 
-                        # self.__MapDriver.WriteVerticalWall( ( x, y ) );
+                        self.__MapDriver.WriteVerticalWall( x, y )
                         self.__draw_history.append( ( "V", x, y ) )                        
 
                 current_line += 1
+
+    def BuildMap( self ):
+        self.__MapDriver.BuildMap()

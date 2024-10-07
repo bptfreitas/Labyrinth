@@ -16,3 +16,8 @@ dir( mc )
 mapDriver = webots.WebotsDriver("teste.wbt")
 
 map = mc.Map( mapDriver  )
+
+map.ReadMap("./map.txt")
+
+map.BuildMap()
+

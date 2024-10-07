@@ -26,3 +26,6 @@ class BaseMapDriver:
 
     def WriteFloor(self, x, y, width, height):
         pass
+
+    def BuildMap(self ):
+        pass

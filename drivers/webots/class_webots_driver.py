@@ -20,7 +20,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         try:
 
-            map_file = open(map_name, "w")
+            self.map_file = open(map_name, "w")
 
         except Exception as e:
 
@@ -39,7 +39,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
         self.__wall_height = 1
 
         # index 1 is wall shape from which all other walls will inherit
-        self.__wall_index = 2
+        self.__wall_index = 1
 
         with open("./drivers/webots/wall_model_horizontal.txt", "r" ) as wall_model_h_f:
 
@@ -51,7 +51,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         with open("./drivers/webots/wall_shape.txt", "r" ) as wall_shape_f:
 
-            self.wall_model_shape = Template( wall_shape_f.read() )
+            self.wall_shape = Template( wall_shape_f.read() )
 
         with open("./drivers/webots/floor_model.txt", "r" ) as floor_model_f:
 
@@ -76,15 +76,46 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
     def WriteHorizontalWall(self, x_i, y_i, z_i = 0):
         sys.stderr.write("\n[WebotsDriver] WriteHorizontalWall( {0}, {1} )"\
-            .format( x, y ) )
+            .format( x_i, y_i ) )
 
         trans_x = x_i * self.__wall_width
 
         trans_y = y_i * self.__wall_height
 
-        trans_z = z_i * 0
+        trans_z = 0
 
-        self.__walls += self.wall_model_hor.substitute( \
+        if self.__wall_index == 1:
+            # wall shape
+
+            self.__walls += self.wall_shape.substitute( \
+                x = trans_x, \
+                y = trans_y, \
+                z = trans_z, \
+                n = self.__wall_index )
+
+        else:
+
+            self.__walls += self.wall_model_hor.substitute( \
+                x = trans_x, \
+                y = trans_y, \
+                z = trans_z, \
+                n = self.__wall_index )
+
+        self.__wall_index += 1
+
+        self.__total_width += self.__wall_width
+
+    def WriteVerticalWall(self, x_i, y_i, z_i  = 0):
+        sys.stderr.write("\n[WebotsDriver], WriteVerticalWall( {0}, {1} )"\
+            .format( x_i, y_i ) )
+
+        trans_x = (x_i ) * self.__wall_width  + 0.5
+
+        trans_y = (y_i ) * self.__wall_height - 0.5
+
+        trans_z = 0
+
+        self.__walls += self.wall_model_ver.substitute( \
             x = trans_x, \
             y = trans_y, \
             z = trans_z, \
@@ -92,10 +123,30 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         self.__wall_index += 1
 
-    def WriteVerticalWall(self, x, y, z  = 0):
-        sys.stderr.write("\n[WebotsDriver], WriteVerticalWall( {0}, {1} )"\
-            .format( x, y ) )
-        pass
+        self.__total_height += self.__wall_height
 
     def WriteFloor(self, x, y, width, height):
         pass
+
+    def BuildMap(self):
+
+        header = self.header.substitute()
+
+        self.map_file.write( header )
+
+        floor = self.floor_model.substitute( \
+            width = self.__total_width,\
+            height = self.__total_height )
+
+        self.map_file.write( floor )
+
+        for wall in self.__walls:
+            self.map_file.write( wall )
+
+        robot = self.robot.substitute()
+
+        self.map_file.write( robot )
+
+        self.map_file.close()
+
+        
