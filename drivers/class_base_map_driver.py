@@ -24,6 +24,16 @@ class BaseMapDriver:
             .format( point2D[0], point2D[1] ) )
         pass
 
+    def SetMazeLength( self, length):
+        sys.stderr.write("\nSetLength( {0} )"\
+            .format( length ) )
+        pass
+
+    def SetMazeWidth( self, width):
+        sys.stderr.write("\nSetWidth( {0} )"\
+            .format( width ) )
+        pass    
+
     def WriteFloor(self, x, y, width, height):
         pass
 

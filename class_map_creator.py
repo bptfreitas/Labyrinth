@@ -17,6 +17,10 @@ class Map:
 
         self.__draw_history = []
 
+        self.__maze_length = 0
+
+        self.__maze_width = 0
+
     def getDrawHistory(self):
 
         return self.__draw_history
@@ -90,10 +94,10 @@ class Map:
 
                     if current_line == 0:
                         # first line defines the maze width
-                        self.__maze_width = wall_chars
+                        self.__maze_length = wall_chars
                     else:
                         # all other lines must match the number calculated above
-                        if self.__maze_width != wall_chars:
+                        if self.__maze_length != wall_chars:
                             msg = "Line {0} has width {1}, expected {2}!".\
                                 format( current_line, wall_chars, self.__maze_width )
                             raise ValueError(msg)
@@ -124,7 +128,6 @@ class Map:
                         msg = "Line {0}: expected {1} '|''s, got {2}"
                         raise ValueError (msg.format( current_line, expected_walls, returned_walls ) )                        
 
-
                     # odd line, vertical walls
                     while len( self.__connectors ) > 0:
                         coordinates = self.__connectors.pop(0)
@@ -133,9 +136,13 @@ class Map:
                         y = coordinates[ 1 ]
 
                         self.__MapDriver.WriteVerticalWall( x, y )
-                        self.__draw_history.append( ( "V", x, y ) )                        
+                        self.__draw_history.append( ( "V", x, y ) )
+
+                    self.__maze_width += 1                  
 
                 current_line += 1
 
     def BuildMap( self ):
+        self.__MapDriver.SetMazeLength( self.__maze_length )
+        self.__MapDriver.SetMazeWidth( self.__maze_width )
         self.__MapDriver.BuildMap()

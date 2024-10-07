@@ -1,3 +1,4 @@
 Floor {
-  size $width $height
+  translation 0.5 0.5 0
+  size $width $length
 }

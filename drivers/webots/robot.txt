@@ -1,5 +1,5 @@
 Robot {
-  translation -0.385 0.38 0.04
+  translation 0.5 0 0.04
   rotation 0 0 1 0
   children [
     DEF BODY Shape {

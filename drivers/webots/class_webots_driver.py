@@ -30,13 +30,13 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         self.__walls = ''
 
+        self.__wall_length = 0
+
         self.__total_width = 0
 
-        self.__total_height = 0
+        self.__wall_length = 1
 
         self.__wall_width = 1
-
-        self.__wall_height = 1
 
         # index 1 is wall shape from which all other walls will inherit
         self.__wall_index = 1
@@ -78,11 +78,11 @@ class WebotsDriver( bmd.BaseMapDriver ):
         sys.stderr.write("\n[WebotsDriver] WriteHorizontalWall( {0}, {1} )"\
             .format( x_i, y_i ) )
 
-        trans_x = x_i * self.__wall_width
+        trans_x = x_i * self.__wall_length
 
-        trans_y = y_i * self.__wall_height
+        trans_y = y_i * self.__wall_width
 
-        trans_z = 0
+        trans_z = 0.05
 
         if self.__wall_index == 1:
             # wall shape
@@ -103,17 +103,15 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         self.__wall_index += 1
 
-        self.__total_width += self.__wall_width
-
     def WriteVerticalWall(self, x_i, y_i, z_i  = 0):
         sys.stderr.write("\n[WebotsDriver], WriteVerticalWall( {0}, {1} )"\
             .format( x_i, y_i ) )
 
-        trans_x = (x_i ) * self.__wall_width  + 0.5
+        trans_x = (x_i ) * self.__wall_length  + 0.5
 
-        trans_y = (y_i ) * self.__wall_height - 0.5
+        trans_y = (y_i ) * self.__wall_width - 0.5
 
-        trans_z = 0
+        trans_z = 0.05
 
         self.__walls += self.wall_model_ver.substitute( \
             x = trans_x, \
@@ -121,12 +119,22 @@ class WebotsDriver( bmd.BaseMapDriver ):
             z = trans_z, \
             n = self.__wall_index )
 
-        self.__wall_index += 1
-
-        self.__total_height += self.__wall_height
+        self.__wall_index += 1        
 
     def WriteFloor(self, x, y, width, height):
         pass
+
+    def SetMazeLength( self, length):
+        sys.stderr.write("\n[WeBots Driver] SetLength( {0} )"\
+            .format( length ) )
+
+        self.__total_length = length
+
+    def SetMazeWidth( self, width):
+        sys.stderr.write("\n[WeBots Driver] SetWidth( {0} )"\
+            .format( width ) )
+
+        self.__total_width = width
 
     def BuildMap(self):
 
@@ -135,8 +143,8 @@ class WebotsDriver( bmd.BaseMapDriver ):
         self.map_file.write( header )
 
         floor = self.floor_model.substitute( \
-            width = self.__total_width,\
-            height = self.__total_height )
+            length = self.__total_length,\
+            width = self.__total_width )
 
         self.map_file.write( floor )
 
