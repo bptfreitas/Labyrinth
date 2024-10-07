@@ -83,6 +83,12 @@ class Map:
                             # open wall, do nothing
                             wall_chars += 1
 
+                            column_index += 1
+
+                        elif character == 'O':
+                            # empty connector, do nothing
+                            pass
+                            
                         else:
 
                             sys.stderr.write("\n[WARN] Invalid character (" +\
@@ -99,7 +105,7 @@ class Map:
                         # all other lines must match the number calculated above
                         if self.__maze_length != wall_chars:
                             msg = "Line {0} has width {1}, expected {2}!".\
-                                format( current_line, wall_chars, self.__maze_width )
+                                format( current_line, wall_chars, self.__maze_length )
                             raise ValueError(msg)
 
                 else:                    
