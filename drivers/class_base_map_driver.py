@@ -32,9 +32,12 @@ class BaseMapDriver:
     def SetMazeWidth( self, width):
         sys.stderr.write("\nSetWidth( {0} )"\
             .format( width ) )
-        pass    
+        pass  
 
     def WriteFloor(self, x, y, width, height):
+        pass
+
+    def SetTarget(self, x, y):
         pass
 
     def BuildMap(self ):

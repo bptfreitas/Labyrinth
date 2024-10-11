@@ -79,6 +79,7 @@ class Map:
                             wall_chars += 1
 
                             column_index += 1
+
                         elif character == ' ':
                             # open wall, do nothing
                             wall_chars += 1
@@ -117,6 +118,9 @@ class Map:
                     returned_walls = 0
 
                     # checking for valid characters
+                    column_index = 0
+
+                    line_index = current_line
 
                     for element in range( len(line) ):
                         character = line[element]
@@ -125,10 +129,17 @@ class Map:
                             returned_walls += 1
                             continue
                         elif character == ' ':
+                            column_index += 1
                             continue
+                        elif character == 'X':
+                            # Target                            
+                            self.__MapDriver.SetTarget( current_line/2 , column_index); 
+                            self.__draw_history.append( ( "X", current_line, column_index) ) 
+
+                            column_index += 1
                         else:
                             msg = "Line {0}: expected '|' or empty space, got '{1}'"
-                            raise ValueError (msg.format( current_line, character ) )
+                            raise ValueError (msg.format( current_line, character ) )                        
 
                     if returned_walls != expected_walls :
                         msg = "Line {0}: expected {1} '|''s, got {2}"

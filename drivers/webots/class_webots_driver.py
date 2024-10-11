@@ -63,7 +63,11 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         with open("./drivers/webots/robot.txt", "r" ) as robot_f:
 
-            self.robot = Template( robot_f.read() )            
+            self.robot = Template( robot_f.read() )
+
+        with open("./drivers/webots/target.txt", "r" ) as target_f:
+
+            self.target = Template( target_f.read() )
 
         if debug:
 
@@ -136,13 +140,31 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         self.__total_width = width
 
+    def SetTarget( self, x_i, y_i, z_i = 0.05):
+        sys.stderr.write("\n[WeBots Driver] SetTarget( {0}, {1} )"\
+            .format( x_i, y_i ) )
+
+        trans_x = (x_i ) * self.__wall_length  + 0.5
+
+        trans_y = (y_i ) * self.__wall_width - 0.5
+
+        trans_z = 0.05            
+
+        self.__target = self.target.substitute( x = x_i, y = y_i, z = z_i)
+
     def BuildMap(self):
 
         header = self.header.substitute()
 
         self.map_file.write( header )
 
+        floor_x = (self.__total_width / 2) 
+ 
+        floor_y = (self.__total_length / 2) - 0.5
+
         floor = self.floor_model.substitute( \
+            x = floor_x,\
+            y = floor_y,\
             length = self.__total_length,\
             width = self.__total_width )
 
@@ -150,6 +172,8 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         for wall in self.__walls:
             self.map_file.write( wall )
+
+        self.map_file.write( self.__target )
 
         robot = self.robot.substitute()
 
