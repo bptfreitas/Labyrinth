@@ -1,0 +1,16 @@
+DEF TARGET_1 Pose {
+  translation $x $y 0.1
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0.264 0.621333
+        roughness 0.2
+        metalness 0
+      }
+      geometry Sphere {
+        radius 0.1
+        subdivision 2
+      }
+    }        
+  ]
+}
