@@ -162,6 +162,14 @@ Robot {
       ]
       name "ds_left"
     }
+    
+    DEF ROBOT_GPS GPS {
+      translation 0 0 0
+      rotation 0 0 0 0
+      type "satellite"	  
+      name "robot_gps"
+    }
+        
   ]
   boundingObject USE BODY
   physics Physics {

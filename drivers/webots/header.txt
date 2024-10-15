@@ -6,6 +6,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 
 WorldInfo {
   basicTimeStep 16
+  gpsCoordinateSystem "local"
+  gpsReference $tx $ty $tz
 }
 Viewpoint {
   orientation 0.2601593616689325 -0.35568075742214544 -0.8976682601805761 4.990345913735541
