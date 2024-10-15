@@ -88,8 +88,7 @@ class Map:
 
                         elif character == 'O':
                             # empty connector, do nothing
-                            pass
-                            
+                            pass                            
                         else:
 
                             sys.stderr.write("\n[WARN] Invalid character (" +\
@@ -134,7 +133,7 @@ class Map:
                         elif character == 'X':
                             # Target                            
                             self.__MapDriver.SetTarget( current_line/2 , column_index); 
-                            self.__draw_history.append( ( "X", current_line, column_index) ) 
+                            self.__draw_history.append( ( "X", current_line/2, column_index) ) 
 
                             column_index += 1
                         else:

@@ -123,7 +123,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
             z = trans_z, \
             n = self.__wall_index )
 
-        self.__wall_index += 1        
+        self.__wall_index += 1 
 
     def WriteFloor(self, x, y, width, height):
         pass
@@ -148,13 +148,19 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         trans_y = (y_i ) * self.__wall_width - 0.5
 
-        trans_z = 0.05            
+        trans_z = 0.05     
 
         self.__target = self.target.substitute( x = x_i, y = y_i, z = z_i)
 
+        self.__tx = - x_i
+        self.__ty = - y_i 
+        self.__tz = - z_i
+
     def BuildMap(self):
 
-        header = self.header.substitute()
+        header = self.header.substitute( tx = self.__tx ,\
+            ty = self.__ty ,\
+            tz = 0)
 
         self.map_file.write( header )
 
