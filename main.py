@@ -10,14 +10,32 @@ import drivers.webots.class_webots_driver as webots
 
 import class_map_creator as mc
 
-dir( bm )
-dir( mc )
+try:
+    mapfile = open(sys.argv[1], "r")
 
-mapDriver = webots.WebotsDriver("teste.wbt")
+except Exception as inst:
 
-map = mc.Map( mapDriver  )
+    print( inst )
+    
+    sys.exit( -1 )
 
-map.ReadMap("./map.txt")
+try:
+
+    output_filename =  sys.argv[2] 
+
+    tmp = open(sys.argv[2], "w")
+
+except Exception as inst:
+
+    output_filename = "world.wbt"
+
+    print( inst )
+
+mapDriver = webots.WebotsDriver(output_filename)
+
+map = mc.Map( mapDriver )
+
+map.ReadMap( sys.argv[1] )
 
 map.BuildMap()
 
