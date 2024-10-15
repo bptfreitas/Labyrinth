@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+
 sys.path.append('../')
 
 sys.path.append('.')
@@ -163,6 +164,60 @@ class TestMap(unittest.TestCase):
         
         self.assertEqual( draw_history[0], ( "C", 0, 0 ) )
         self.assertEqual( draw_history[1], ( "V", 0, 0 ) )
+
+
+    def test_vertical_wall_02(self):
+
+        map_file = "/tmp/test_vertical_wall_01.txt"
+        
+        with open(map_file, "w") as map01:
+
+            map01.write( "*-*\n| |" )
+
+        mapDriver = bm.BaseMapDriver()
+
+        map = mc.Map(mapDriver)
+
+        map.ReadMap( map_file )
+
+        draw_history = map.getDrawHistory()
+
+        self.assertEqual( len(draw_history), 5 )
+        
+        self.assertEqual( draw_history[0], ( "C", 0, 0 ) )
+        self.assertEqual( draw_history[1], ( "H", 0, 0 ) )
+
+        self.assertEqual( draw_history[2], ( "C", 0, 1 ) )
+        self.assertEqual( draw_history[3], ( "V", 0, 0 ) )
+
+        self.assertEqual( draw_history[4], ( "V", 0, 1 ) )
+
+    def test_vertical_wall_02(self):
+
+        map_file = "/tmp/test_vertical_wall_01.txt"
+        
+        with open(map_file, "w") as map01:
+
+            map01.write( "*-*\n| |\n-" )
+
+        mapDriver = bm.BaseMapDriver()
+
+        map = mc.Map(mapDriver)
+
+        map.ReadMap( map_file )
+
+        draw_history = map.getDrawHistory()
+
+        self.assertEqual( len(draw_history), 6 )
+        
+        self.assertEqual( draw_history[0], ( "C", 0, 0 ) )
+        self.assertEqual( draw_history[1], ( "H", 0, 0 ) )
+        self.assertEqual( draw_history[2], ( "C", 0, 1 ) )        
+
+        self.assertEqual( draw_history[3], ( "V", 0, 0 ) )        
+        self.assertEqual( draw_history[4], ( "V", 0, 1 ) )
+
+        self.assertEqual( draw_history[5], ( "H", 1, 0 ) )
 
 if __name__ == '__main__' :
 
