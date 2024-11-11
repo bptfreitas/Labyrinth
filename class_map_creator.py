@@ -72,7 +72,7 @@ class Map:
 
                         elif character == '-':
                             # horizontal wall
-                            self.__MapDriver.WriteHorizontalWall( line_index, column_index ); 
+                            # self.__MapDriver.WriteHorizontalWall( line_index, column_index ); 
                             self.__draw_history.append( ( "H", line_index, column_index) )
 
                             # this variable holds the current width of the wall 
@@ -131,8 +131,7 @@ class Map:
                             column_index += 1
                             continue
                         elif character == 'X':
-                            # Target                            
-                            self.__MapDriver.SetTarget( current_line/2 , column_index); 
+                            # Target - an X on a map sets the target to its center
                             self.__draw_history.append( ( "X", current_line/2, column_index) ) 
 
                             column_index += 1
@@ -151,7 +150,7 @@ class Map:
                         x = coordinates[ 0 ]
                         y = coordinates[ 1 ]
 
-                        self.__MapDriver.WriteVerticalWall( x, y )
+                        # self.__MapDriver.WriteVerticalWall( x, y )
                         self.__draw_history.append( ( "V", x, y ) )
 
                     self.__maze_width += 1                  
@@ -161,4 +160,27 @@ class Map:
     def BuildMap( self ):
         self.__MapDriver.SetMazeLength( self.__maze_length )
         self.__MapDriver.SetMazeWidth( self.__maze_width )
+
+        for obj in self.__draw_history:
+
+            obj_type = obj[0]   
+
+            if ( obj_type == "H" ):
+                line_index = obj[1]
+                column_index = obj[2]
+
+                self.__MapDriver.WriteHorizontalWall( line_index, column_index )
+
+            if ( obj_type == "V" ):
+                line_index = obj[1]
+                column_index = obj[2]
+
+                self.__MapDriver.WriteVerticalWall( line_index, column_index )
+
+            if ( obj_type == "X" ):
+                line_index = obj[1]
+                column_index = obj[2]
+
+                self.__MapDriver.SetTarget( line_index, column_index )                
+
         self.__MapDriver.BuildMap()
