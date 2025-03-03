@@ -1,16 +1,51 @@
-DEF TARGET_1 Pose {
+Robot {
   translation $x $y 0.1
+  rotation 0 0 1 0
+  name "target_robot"
   children [
+  
+    DEF BODY Shape {
+      appearance PBRAppearance {
+        baseColor 0.917647 0.145098 0.145098
+        roughness 1
+        metalness 0
+      }
+      
+      geometry Cylinder {
+        height 0.1
+        radius 0.05
+      }
+    }
+    
     Shape {
+           
       appearance PBRAppearance {
         baseColor 0.8 0.264 0.621333
         roughness 0.2
         metalness 0
       }
+      
       geometry Sphere {
         radius 0.1
         subdivision 2
       }
-    }        
+    }    
+    
+    DEF ROBOT_GPS GPS {
+      translation 0 0 0
+      rotation 0 0 0 0
+      type "satellite"	  
+      name "target_robot_gps"
+    }
+    
   ]
+  
+  boundingObject USE BODY
+  physics Physics {
+    density -1
+    mass 1
+  }  
+  
+  
+  controller "target"
 }

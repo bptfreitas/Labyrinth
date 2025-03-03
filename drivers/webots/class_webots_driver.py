@@ -21,6 +21,8 @@ class WebotsDriver( bmd.BaseMapDriver ):
         try:
 
             self.map_file = open(map_name, "w")
+            
+            self.MAS_file = open( map_name + ".chon", "w")
 
         except Exception as e:
 
@@ -68,6 +70,16 @@ class WebotsDriver( bmd.BaseMapDriver ):
         with open("./drivers/webots/target.txt", "r" ) as target_f:
 
             self.target = Template( target_f.read() )
+            
+        with open("./drivers/webots/charger.model", "r" ) as charger_f:
+
+            self.charger = Template( charger_f.read() )
+            
+        with open("./drivers/webots/MAS.model", "r" ) as MAS_f:
+
+            self.MAS = Template( MAS_f.read() )
+            
+        self.__MAS_Beliefs = ''
 
         if debug:
 
@@ -79,7 +91,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
         pass
 
     def WriteHorizontalWall(self, x_i, y_i, z_i = 0):
-        sys.stderr.write("\n[WebotsDriver] WriteHorizontalWall( {0}, {1} )"\
+        sys.stderr.write("\n[WeBots Driver] WriteHorizontalWall( {0}, {1} )"\
             .format( x_i, y_i ) )
 
         trans_x = x_i * self.__wall_length
@@ -108,7 +120,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
         self.__wall_index += 1
 
     def WriteVerticalWall(self, x_i, y_i, z_i  = 0):
-        sys.stderr.write("\n[WebotsDriver], WriteVerticalWall( {0}, {1} )"\
+        sys.stderr.write("\n[WeBots Driver] WriteVerticalWall( {0}, {1} )"\
             .format( x_i, y_i ) )
 
         trans_x = (x_i ) * self.__wall_length  + 0.5
@@ -139,22 +151,53 @@ class WebotsDriver( bmd.BaseMapDriver ):
             .format( width ) )
 
         self.__total_width = width
+        
+        
+    def SetCharger( self, x_i, y_i, z_i = 0.05):
+        sys.stderr.write("\n[WeBots Driver] SetCharger( {0}, {1} )"\
+            .format( x_i, y_i ) )
+
+        trans_x = ( x_i ) * self.__wall_length  + 0.5
+
+        trans_y = ( y_i ) * self.__wall_width - 0.5
+
+        trans_z = 0.05
+        
+        self.__MAS_Beliefs += 'charger1( {0}, {1}, {2} ).\\n\\n'.format( x_i, y_i, z_i )
+
+        self.__charger = self.charger.substitute( x = x_i, y = y_i, z = z_i)
+
+        # self.__tx = - x_i
+        # self.__ty = - y_i
+        # self.__tz = - z_i
+
+        self.__tx = 0
+        self.__ty = 0
+        self.__tz = 0        
 
     def SetTarget( self, x_i, y_i, z_i = 0.05):
         sys.stderr.write("\n[WeBots Driver] SetTarget( {0}, {1} )"\
             .format( x_i, y_i ) )
 
-        trans_x = (x_i ) * self.__wall_length  + 0.5
+        trans_x = ( x_i ) * self.__wall_length  + 0.5
 
-        trans_y = (y_i ) * self.__wall_width - 0.5
+        trans_y = ( y_i ) * self.__wall_width - 0.5
 
-        trans_z = 0.05     
+        trans_z = 0.05
+                        
+        self.__MAS_Beliefs += 'target1( {0}, {1}, {2} ).\\n\\n'.format( x_i, y_i, z_i )
 
         self.__target = self.target.substitute( x = x_i, y = y_i, z = z_i)
 
-        self.__tx = - x_i
-        self.__ty = - y_i 
-        self.__tz = - z_i
+        # self.__tx = - x_i
+        # self.__ty = - y_i
+        # self.__tz = - z_i
+
+        self.__tx = 0
+        self.__ty = 0
+        self.__tz = 0
+
+
 
     def BuildMap(self):
 
@@ -180,11 +223,19 @@ class WebotsDriver( bmd.BaseMapDriver ):
             self.map_file.write( wall )
 
         self.map_file.write( self.__target )
+        
+        self.map_file.write( self.__charger )
 
         robot = self.robot.substitute()
 
         self.map_file.write( robot )
 
         self.map_file.close()
+        
+        
+        self.MAS_file.write( self.MAS.substitute( BELIEFS = self.__MAS_Beliefs ) )
+        self.MAS_file.close()
+        
+        
 
         
