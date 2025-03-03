@@ -1,1 +1,1 @@
-{"id":14,"name":"teste","agents":[{"archClass":"jason.Argo","name":"modelo","sourceCode":"/* Initial beliefs and rules */\n\n$BELIEFS/* Initial goals */\n\n!start.\n\n/* Plans */\n\n+!start <- .print(\"Never Send A Human To Do A Machine's Job!\")."}],"firmwares":[]}
+{"id":14,"name":"$proj_name","agents":[{"archClass":"jason.Argo","name":"modelo","sourceCode":"/* Initial beliefs and rules */\n\n$BELIEFS/* Initial goals */\n\n!start.\n\n/* Plans */\n\n+!start <- .print(\"Never Send A Human To Do A Machine's Job!\")."}],"firmwares":[]}

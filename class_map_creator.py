@@ -135,9 +135,15 @@ class Map:
                             self.__draw_history.append( ( "X", current_line/2, column_index) ) 
 
                             column_index += 1
+                            
+                        elif character == 'R':
+                            # Target - an C charger
+                            self.__draw_history.append( ( "R", current_line/2, column_index) ) 
+
+                            column_index += 1                            
                         else:
                             msg = "Line {0}: expected '|' or empty space, got '{1}'"
-                            raise ValueError (msg.format( current_line, character ) )                        
+                            raise ValueError (msg.format( current_line, character ) )                       
 
                     if returned_walls != expected_walls :
                         msg = "Line {0}: expected {1} '|''s, got {2}"
@@ -159,7 +165,7 @@ class Map:
 
     def BuildMap( self ):
         self.__MapDriver.SetMazeLength( self.__maze_length )
-        self.__MapDriver.SetMazeWidth( self.__maze_width )
+        self.__MapDriver.SetMazeWidth( self.__maze_width )      
 
         for obj in self.__draw_history:
 
@@ -170,17 +176,25 @@ class Map:
                 column_index = obj[2]
 
                 self.__MapDriver.WriteHorizontalWall( line_index, column_index )
+                continue
 
-            if ( obj_type == "V" ):
+            elif ( obj_type == "V" ):
                 line_index = obj[1]
                 column_index = obj[2]
 
                 self.__MapDriver.WriteVerticalWall( line_index, column_index )
 
-            if ( obj_type == "X" ):
+            elif ( obj_type == "X" ):
                 line_index = obj[1]
                 column_index = obj[2]
 
-                self.__MapDriver.SetTarget( line_index, column_index )                
+                self.__MapDriver.SetTarget( line_index, column_index )
+                
+            elif ( obj_type == "R" ):
+                line_index = obj[1]
+                column_index = obj[2]
 
+                self.__MapDriver.SetCharger( line_index, column_index )                                
+
+            	
         self.__MapDriver.BuildMap()

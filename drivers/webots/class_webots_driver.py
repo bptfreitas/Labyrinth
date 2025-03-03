@@ -20,7 +20,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
         try:
 
-            self.map_file = open(map_name, "w")
+            self.map_file = open( map_name, "w")
             
             self.MAS_file = open( map_name + ".chon", "w")
 
@@ -29,6 +29,11 @@ class WebotsDriver( bmd.BaseMapDriver ):
             sys.stderr.write ( "[WebotsDriver] ERROR:" +  e )
 
             return
+            
+        try:
+            self.__project_name = map_name[ : map_name.index( '.' ) ]
+        except:
+            self.__project_name = map_name
 
         self.__walls = ''
 
@@ -233,7 +238,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
         self.map_file.close()
         
         
-        self.MAS_file.write( self.MAS.substitute( BELIEFS = self.__MAS_Beliefs ) )
+        self.MAS_file.write( self.MAS.substitute( proj_name = self.__project_name , BELIEFS = self.__MAS_Beliefs ) )
         self.MAS_file.close()
         
         
