@@ -39,6 +39,9 @@ class BaseMapDriver:
 
     def SetTarget(self, x, y):
         pass
+        
+    def SetCharger(self, x, y):
+        pass        
 
     def BuildMap(self ):
         pass
