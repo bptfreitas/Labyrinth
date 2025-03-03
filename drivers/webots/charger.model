@@ -1,0 +1,41 @@
+Charger {
+
+  translation $x $y 0
+  rotation 0 0 1 1.5708
+  
+  children [
+    Pose {
+      translation 0 0 0.15
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            transparency 0.20000000298023224
+            roughness 0.2189099510000001
+            metalness 0
+            emissiveColor 0.7571200132369995 0.24288000166416168 0
+          }
+          geometry DEF CHARGER_GEOM Cylinder {
+            height 0.3
+            radius 0.1
+            subdivision 24
+          }
+        }
+        PointLight {
+          attenuation 0 0 12
+          color 0.7571200132369995 0.24288000166416168 0
+          intensity 0.3
+        }
+      ]
+    }
+  ]
+  
+  name "charger"
+  
+  battery [0, 100, 20]
+  radius 0.1
+  emissiveColor 0 1 0
+  gradual TRUE
+  
+
+}
