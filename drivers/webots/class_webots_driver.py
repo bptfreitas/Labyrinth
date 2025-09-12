@@ -35,6 +35,10 @@ class WebotsDriver( bmd.BaseMapDriver ):
         except:
             self.__project_name = map_name
 
+        self.__targets = []
+
+        self.__chargers = []
+
         self.__walls = ''
 
         self.__wall_length = 0
@@ -170,7 +174,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
         
         self.__MAS_Beliefs += 'charger1( {0}, {1}, {2} ).\\n\\n'.format( x_i, y_i, z_i )
 
-        self.__charger = self.charger.substitute( x = x_i, y = y_i, z = z_i)
+        self.__chargers.append( self.charger.substitute( x = x_i, y = y_i, z = z_i) )
 
         # self.__tx = - x_i
         # self.__ty = - y_i
@@ -192,7 +196,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
                         
         self.__MAS_Beliefs += 'target1( {0}, {1}, {2} ).\\n\\n'.format( x_i, y_i, z_i )
 
-        self.__target = self.target.substitute( x = x_i, y = y_i, z = z_i)
+        self.__targets.append( self.target.substitute( x = x_i, y = y_i, z = z_i) )
 
         # self.__tx = - x_i
         # self.__ty = - y_i
@@ -227,9 +231,18 @@ class WebotsDriver( bmd.BaseMapDriver ):
         for wall in self.__walls:
             self.map_file.write( wall )
 
-        self.map_file.write( self.__target )
+        if len( self.__targets ) > 0:
+
+            for target in self.__targets:
+                self.map_file.write( target )
+        else:
+            print("WARNING: No targets detected!")
         
-        self.map_file.write( self.__charger )
+        if len( self.__chargers ) > 0 :
+            for charger in self.__chargers:
+                self.map_file.write( charger )
+        else:
+            print("WARNING: no chargers detected!")
 
         robot = self.robot.substitute()
 

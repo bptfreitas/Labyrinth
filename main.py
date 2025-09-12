@@ -10,20 +10,43 @@ import drivers.webots.class_webots_driver as webots
 
 import class_map_creator as mc
 
+import argparse
+import pathlib
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-i', 
+    nargs = 1, 
+    type = pathlib.Path,
+    dest = 'map_filename')
+
+parser.add_argument('-o', 
+    nargs='?', 
+    type = pathlib.Path,
+    dest = 'sim_filename')
+
+args = parser.parse_args( )
+
+print( args.map_filename[0] )
+
 try:
-    mapfile = open(sys.argv[1], "r")
+    mapfile = args.map_filename[0]
+
+    with open( mapfile ,  "r") as tmp:
+        pass
 
 except Exception as inst:
 
-    print( inst )
+    print( "Error reading input filename: ", inst )
     
     sys.exit( -1 )
 
 try:
 
-    output_filename =  sys.argv[2] 
+    output_filename =  args.sim_file[0] 
 
-    tmp = open(sys.argv[2], "w")
+    with open( output_filename, "w") as tmp:
+        pass
 
 except Exception as inst:
 
@@ -35,7 +58,9 @@ mapDriver = webots.WebotsDriver(output_filename)
 
 map = mc.Map( mapDriver )
 
-map.ReadMap( sys.argv[1] )
+print( "Reading map description ...")
+map.ReadMap( mapfile )
 
+print( "Buiding map on Webots ..." )
 map.BuildMap()
 
