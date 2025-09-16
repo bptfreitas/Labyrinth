@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
 import sys
+import shutil
+import os
+import subprocess
 
 sys.path.append('.')
 
@@ -54,6 +57,28 @@ except Exception as inst:
 
     print( inst )
 
+if not os.path.isdir( "project_model" ):
+    print("Downloading project model from github ...")
+
+    cmd = [ ]
+    cmd.append( "git" )
+    cmd.append( "clone" )
+    cmd.append( "https://github.com/bptfreitas/FourWheels_With_ChonIDE_Webots.git" )
+    cmd.append( "project_model")
+
+    subprocess.run( cmd )
+
+if os.path.isdir( "output" ):
+    shutil.rmtree( "./output" )
+
+shutil.copytree( "project_model" , "output" )
+
+shutil.rmtree( "./output/SMA" )
+shutil.rmtree( "./output/worlds" )
+
+os.mkdir( "./output/SMA" )
+os.mkdir( "./output/worlds" )
+
 mapDriver = webots.WebotsDriver(output_filename)
 
 map = mc.Map( mapDriver )
@@ -63,4 +88,7 @@ map.ReadMap( mapfile )
 
 print( "Buiding map on Webots ..." )
 map.BuildMap()
+
+shutil.move( output_filename , "./output/worlds/.")
+shutil.move( output_filename + ".chon" , "./output/SMA/.")
 
