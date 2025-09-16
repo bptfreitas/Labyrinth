@@ -76,7 +76,7 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
             self.robot = Template( robot_f.read() )
 
-        with open("./drivers/webots/target.txt", "r" ) as target_f:
+        with open("./drivers/webots/target.model", "r" ) as target_f:
 
             self.target = Template( target_f.read() )
             
