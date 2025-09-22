@@ -3,7 +3,7 @@ DEF CYLINDER Pose {
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.264 0.8 0.264
+        baseColor 0.5 0.0 0.0
         roughness 0.2
         metalness 0
       }
@@ -20,7 +20,7 @@ DEF CONE Pose {
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.8 0.621333 0.264
+        baseColor 0.5 0 0
         roughness 0.2
         metalness 0
       }
