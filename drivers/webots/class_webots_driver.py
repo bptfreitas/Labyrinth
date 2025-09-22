@@ -222,8 +222,8 @@ class WebotsDriver( bmd.BaseMapDriver ):
 
     def BuildMap(self):
 
-        header = self.header.substitute( tx = self.__tx ,\
-            ty = self.__ty ,\
+        header = self.header.substitute( tx = 0 ,\
+            ty = 0 ,\
             tz = 0)
 
         self.map_file.write( header )
