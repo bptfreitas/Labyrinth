@@ -59,8 +59,8 @@ class TestMap(unittest.TestCase):
             
             self.assertEqual( proc.returncode, 0 )
 
-            with open( 'build.log' , 'w' ) as log:
-                log.write( str(proc.stdout ) ) 
+            with open( 'build.log' , 'wb' ) as log:
+                log.write( proc.stdout) 
 
 
 
