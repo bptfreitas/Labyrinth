@@ -171,10 +171,12 @@ class WebotsDriver( bmd.BaseMapDriver ):
         trans_y = ( y_i ) * self.__wall_width - 0.5
 
         trans_z = 0.05
-        
-        self.__MAS_Beliefs += 'charger1( {0}, {1}, {2} ).\\n\\n'.format( x_i, y_i, z_i )
 
-        self.__chargers.append( self.charger.substitute( x = x_i, y = y_i, z = z_i) )
+        charger_id = len( self.__chargers )
+        
+        self.__MAS_Beliefs += 'charger{0}( {1}, {2}, {3} ).\\n\\n'.format( charger_id, x_i, y_i, z_i )
+
+        self.__chargers.append( self.charger.substitute( n= charger_id,  x = x_i, y = y_i, z = z_i) )
 
         # self.__tx = - x_i
         # self.__ty = - y_i
@@ -193,8 +195,10 @@ class WebotsDriver( bmd.BaseMapDriver ):
         trans_y = ( y_i ) * self.__wall_width - 0.5
 
         trans_z = 0.05
+
+        target_id = len( self.__targets )
                         
-        self.__MAS_Beliefs += 'target1( {0}, {1}, {2} ).\\n\\n'.format( x_i, y_i, z_i )
+        self.__MAS_Beliefs += 'target{0}( {1}, {2}, {3} ).\\n\\n'.format( target_id, x_i, y_i, z_i )
 
         self.__targets.append( self.target.substitute( x = x_i, y = y_i, z = z_i) )
 
