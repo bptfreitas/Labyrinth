@@ -90,6 +90,10 @@ class WebotsDriver( bmd.BaseMapDriver ):
             
         self.__MAS_Beliefs = ''
 
+        self.Makefile_cfg = open( './output/controllers/four_wheels_collision_avoidance/config.include' , 'w')
+
+        self.Makefile_cfg.write( 'USE_GPS = -DUSE_GPS' )
+
         if debug:
 
             x = self.wall_model_hor.substitute( n = 0, x = 1, y = 2, z = 3 )
@@ -173,6 +177,10 @@ class WebotsDriver( bmd.BaseMapDriver ):
         trans_z = 0.05
 
         charger_id = len( self.__chargers )
+
+        if charger_id == 0:
+            # first charger, add battery to controller            
+            self.Makefile_cfg.write( '\nUSE_BATTERY = -DUSE_BATTERY' )
         
         self.__MAS_Beliefs += 'charger{0}( {1}, {2}, {3} ).\\n\\n'.format( charger_id, x_i, y_i, z_i )
 
@@ -257,6 +265,8 @@ class WebotsDriver( bmd.BaseMapDriver ):
         
         self.MAS_file.write( self.MAS.substitute( proj_name = self.__project_name , BELIEFS = self.__MAS_Beliefs ) )
         self.MAS_file.close()
+
+        self.Makefile_cfg.close()
         
         
 
