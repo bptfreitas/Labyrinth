@@ -1,5 +1,5 @@
 *.wbproj
 *.wbt
-*.wbt.chonoutput
-./drivers/__pycache__/class_base_map.cpython-310.pyc ./drivers/__pycache__/class_base_map_driver.cpython-310.pyc ./drivers/__pycache__/class_base_map_driver.cpython-311.pyc ./drivers/__pycache__/class_base_map_driver.cpython-312.pyc ./drivers/__pycache__/__init__.cpython-310.pyc ./drivers/__pycache__/__init__.cpython-311.pyc ./drivers/__pycache__/__init__.cpython-312.pyc
+*.wbt.chon
+output
 __pycache__
