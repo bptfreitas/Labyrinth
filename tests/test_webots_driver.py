@@ -47,6 +47,12 @@ class TestMap(unittest.TestCase):
 
             os.chdir( cur_dir + "/__testing/" + proj + "/controllers/four_wheels_collision_avoidance" )
 
+            proc = sp.run( ['make', 'WEBOTS_HOME=/usr/local/webots', 'clean' ] ,\
+                stdout = sp.DEVNULL ,\
+                stderr = sp.STDOUT )
+            
+            self.assertEqual( proc.returncode, 0 )            
+
             proc = sp.run( ['make', 'WEBOTS_HOME=/usr/local/webots', 'all' ] ,\
                 stdout = sp.PIPE ,\
                 stderr = sp.STDOUT )
