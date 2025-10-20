@@ -42,25 +42,33 @@ class TestMap(unittest.TestCase):
             
         cur_dir = os.getcwd()
 
-        for proj in sorted( os.listdir("./__testing") ):
-            print( "Compiling " , proj, "controller ..." )
-
-            os.chdir( cur_dir + "/__testing/" + proj + "/controllers/four_wheels_collision_avoidance" )
-
-            proc = sp.run( ['make', 'WEBOTS_HOME=/usr/local/webots', 'clean' ] ,\
-                stdout = sp.DEVNULL ,\
-                stderr = sp.STDOUT )
+        with open( 'build.log' , 'wb' ) as log:
             
-            self.assertEqual( proc.returncode, 0 )            
+            for proj in sorted( os.listdir("./__testing") ):
 
-            proc = sp.run( ['make', 'WEBOTS_HOME=/usr/local/webots', 'all' ] ,\
-                stdout = sp.PIPE ,\
-                stderr = sp.STDOUT )
-            
-            self.assertEqual( proc.returncode, 0 )
+                print( "Compiling " , proj, "controller ..." )
 
-            with open( 'build.log' , 'wb' ) as log:
-                log.write( proc.stdout) 
+                log.write( bytes( proj + '\n','utf-8' ) )
+
+                os.chdir( cur_dir + "/__testing/" + proj + "/controllers/four_wheels_collision_avoidance" )
+
+                proc = sp.run( ['make', 'WEBOTS_HOME=/usr/local/webots', 'clean' ] ,\
+                    stdout = sp.DEVNULL ,\
+                    stderr = sp.STDOUT )
+                
+                if proc.stdout != None:
+                    log.write( proc.stdout )
+
+                self.assertEqual( proc.returncode, 0 )
+
+                proc = sp.run( ['make', 'WEBOTS_HOME=/usr/local/webots', 'all' ] ,\
+                    stdout = sp.PIPE ,\
+                    stderr = sp.STDOUT )
+                
+                if proc.stdout != None:
+                    log.write( proc.stdout)
+                 
+                self.assertEqual( proc.returncode, 0 )
 
 
 
