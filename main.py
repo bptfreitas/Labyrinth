@@ -69,15 +69,21 @@ if not os.path.isdir( "project_model" ):
     cmd.append( "git" )
     cmd.append( "clone" )
 
+    branch = []
     try: 
-        cmd.append( "-b" )
-        cmd.append( str( args.branch_name[ 0 ] ) )
+        branch.append( "-b" )
+        branch.append( str( args.branch_name[ 0 ] ) )
         print( "Cloning branch '" + str( args.branch_name[ 0 ] ) + "'" )
     except:
         print("Cloning default branch")
+        branch = []
+
+    cmd.extend( branch )
 
     cmd.append( "https://github.com/bptfreitas/FourWheels_With_ChonIDE_Webots.git" )
     cmd.append( "project_model")
+
+    print( cmd )
 
     subprocess.run( cmd )
 
