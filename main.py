@@ -21,16 +21,21 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-i', 
     nargs = 1, 
     type = pathlib.Path,
-    dest = 'map_filename')
+    dest = 'map_filename',
+    required = True )
 
 parser.add_argument('-o', 
     nargs='?', 
     type = pathlib.Path,
     dest = 'sim_filename')
 
-args = parser.parse_args( )
+parser.add_argument('--branch', 
+    nargs=1,
+    dest = 'branch_name')
 
-print( args.map_filename[0] )
+args = parser.parse_args( )
+# print( args )
+# print( args.map_filename[0] )
 
 try:
     mapfile = args.map_filename[0]
@@ -63,6 +68,14 @@ if not os.path.isdir( "project_model" ):
     cmd = [ ]
     cmd.append( "git" )
     cmd.append( "clone" )
+
+    try: 
+        cmd.append( "-b" )
+        cmd.append( str( args.branch_name[ 0 ] ) )
+        print( "Cloning branch '" + str( args.branch_name[ 0 ] ) + "'" )
+    except:
+        print("Cloning default branch")
+
     cmd.append( "https://github.com/bptfreitas/FourWheels_With_ChonIDE_Webots.git" )
     cmd.append( "project_model")
 
